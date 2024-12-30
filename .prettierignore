@@ -1,0 +1,10 @@
+# Dependency directories
+node_modules/
+
+# Root level folders/files
+/package.json
+/pnpm-lock.yaml
+/README.md
+/.gitignore
+/.prettierignore
+/.env
