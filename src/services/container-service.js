@@ -34,9 +34,26 @@ const deleteContainer = async (containerId) => {
   await Container.query().findById(containerId).delete();
 };
 
-const listContainers = async (filter, sortBy, sortOrder, offset, limit) => {
+const listContainers = async (
+  topLevel,
+  container,
+  sortBy,
+  sortOrder,
+  offset,
+  limit,
+) => {
   const sort = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
-  const containers = await Container.query().select('*');
+  const containersQuery = Container.query();
+  let containers = [];
+  if (topLevel) {
+    containers = await containersQuery.select('*').whereNull('container_id');
+  } else if (container) {
+    containers = await containersQuery
+      .select('*')
+      .where('container_id', container);
+  } else {
+    containers = await containersQuery.select('*');
+  }
   return toDtoBulk(containers);
 };
 

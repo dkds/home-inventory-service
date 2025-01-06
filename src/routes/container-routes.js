@@ -72,19 +72,26 @@ router.get(
 
 /* GET containers listing. */
 router.get('/', validateQuery(containerListSchema), async (req, res) => {
-  const { filter, sort_by, sort_order, offset, limit } = req.query || {};
+  const { top_level, container, sort_by, sort_order, offset, limit } =
+    req.query || {};
   const containers = await listContainers(
-    filter,
+    top_level,
+    container,
     sort_by,
     sort_order,
     offset,
     limit,
   );
-  res
-    .status(status.OK)
-    .json(
-      listResponse(containers, { filter, sort_by, sort_order, offset, limit }),
-    );
+  res.status(status.OK).json(
+    listResponse(containers, {
+      top_level,
+      container,
+      sort_by,
+      sort_order,
+      offset,
+      limit,
+    }),
+  );
 });
 
 module.exports = router;
