@@ -1,6 +1,6 @@
 const { log } = require('../util/log');
 const Container = require('../entities/container');
-const { toDto, toEntity, toDtoBulk } = require('../dto/container');
+const { toDto, toEntity, toDtoBulk, toInfoDto } = require('../dto/container');
 
 const init = async () => {
   log.info('container-service initialized');
@@ -18,6 +18,14 @@ const getContainer = async (containerId) => {
     .withGraphFetched('childContainers')
     .withGraphFetched('parentContainer.^');
   return toDto(container);
+};
+
+const getContainerInfo = async (containerId) => {
+  const container = await Container.query()
+    .findById(containerId)
+    .withGraphFetched('childContainers')
+    .withGraphFetched('items');
+  return toInfoDto(container);
 };
 
 const updateContainer = async (containerId, containerDto) => {
@@ -66,6 +74,7 @@ module.exports = {
   shutdown,
   createContainer,
   getContainer,
+  getContainerInfo,
   updateContainer,
   deleteContainer,
   listContainers,

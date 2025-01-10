@@ -10,6 +10,7 @@ const {
   getContainer,
   updateContainer,
   deleteContainer,
+  getContainerInfo,
 } = require('../services/container-service');
 const { validateBody, validateQuery } = require('../util/request-validator');
 const { listContainerItems } = require('../services/item-service');
@@ -69,6 +70,13 @@ router.get(
       );
   },
 );
+
+/* GET container info. */
+router.get('/:containerId/info', async (req, res) => {
+  const containerId = req.params.containerId;
+  const container = await getContainerInfo(containerId);
+  res.status(status.OK).json(response(container));
+});
 
 /* GET containers listing. */
 router.get('/', validateQuery(containerListSchema), async (req, res) => {

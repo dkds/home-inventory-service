@@ -33,6 +33,18 @@ const toDto = (entity) => {
       : {}),
   };
 };
+const toInfoDto = (entity) => {
+  if (!entity) {
+    return null;
+  }
+
+  return {
+    id: entity.id,
+    name: entity.name,
+    childContainerCount: entity.childContainers?.length || 0,
+    itemCount: entity.items?.length || 0,
+  };
+};
 const toDtoBulk = (entities) => {
   if (!entities) {
     return [];
@@ -49,6 +61,7 @@ const toEntity = (dto) => {
 
 module.exports = {
   toDto,
+  toInfoDto,
   toDtoBulk,
   toEntity,
   containerCreateSchema,
