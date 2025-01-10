@@ -36,7 +36,7 @@ const deleteItem = async (itemId) => {
 
 const listContainerItems = async (
   containerId,
-  filter,
+  filter = '',
   sortBy,
   sortOrder,
   offset,
@@ -46,11 +46,31 @@ const listContainerItems = async (
   const items = await Item.query()
     .select('*')
     .where('container_id', containerId)
+    // .andWhereILike('name', `%${filter}%`)
     .withGraphFetched('images');
   return toDtoBulk(items);
 };
 
-const listItems = async (filter, sortBy, sortOrder, offset, limit) => {
+const listItems = async (
+  containerId,
+  filter,
+  sortBy,
+  sortOrder,
+  offset,
+  limit,
+) => {
+  if (containerId) {
+    console.log(containerId, filter, sortBy, sortOrder, offset, limit);
+
+    return listContainerItems(
+      containerId,
+      filter,
+      sortBy,
+      sortOrder,
+      offset,
+      limit,
+    );
+  }
   const sort = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
   const items = await Item.query().select('*');
   return toDtoBulk(items);

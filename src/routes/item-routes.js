@@ -41,7 +41,7 @@ router.delete('/:itemId', async (req, res) => {
   res.status(status.NO_CONTENT).json(response(null));
 });
 
-/* POST create item. */
+/* POST upload image. */
 router.post('/:itemId/images', upload.array('images', 5), async (req, res) => {
   const itemId = req.params.itemId;
   const images = await Promise.all(
@@ -50,7 +50,7 @@ router.post('/:itemId/images', upload.array('images', 5), async (req, res) => {
   res.status(status.CREATED).json(response(images));
 });
 
-/* GET container items listing. */
+/* GET item images listing. */
 router.get(
   '/:itemId/images',
   validateQuery(itemListSchema),
@@ -75,8 +75,16 @@ router.get(
 
 /* GET items listing. */
 router.get('/', validateQuery(itemListSchema), async (req, res) => {
-  const { filter, sort_by, sort_order, offset, limit } = req.query || {};
-  const items = await listItems(filter, sort_by, sort_order, offset, limit);
+  const { container_id, filter, sort_by, sort_order, offset, limit } =
+    req.query || {};
+  const items = await listItems(
+    container_id,
+    filter,
+    sort_by,
+    sort_order,
+    offset,
+    limit,
+  );
   res
     .status(status.OK)
     .json(listResponse(items, { filter, sort_by, sort_order, offset, limit }));

@@ -7,6 +7,7 @@ const itemCreateSchema = Joi.object({
   containerId: Joi.number().min(1),
 });
 const itemListSchema = Joi.object({
+  container_id: Joi.number().min(1),
   offset: Joi.number().min(0).default(0),
   limit: Joi.number().min(1).max(50).default(10),
   sort_order: Joi.string().valid('asc', 'desc').default('asc'),
